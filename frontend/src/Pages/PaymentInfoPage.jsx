@@ -126,7 +126,7 @@ const PaymentInfoPage = () => {
     const userId = "5"; // Replace with real user ID logic
     try {
       const response = await fetch(
-        `http://localhost:9000/api/payment`,
+        `http://angel-voice.ru/api/api/payment`,
         {
           method: "POST",
           headers: {

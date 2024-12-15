@@ -109,7 +109,7 @@ const MainPage = () => {
   useEffect(() => {
     const fetchContent = async () => {
       try {
-        const response = await axios.get("http://localhost:9000/api/content");
+        const response = await axios.get("http://angel-voice.ru/api/api/content");
         setCards(Array.isArray(response.data) ? response.data : []);
       } catch (error) {
         console.error("Error fetching content:", error);
@@ -126,7 +126,7 @@ const MainPage = () => {
     }); // Лог отправляемых данных
     try {
       const response = await axios.post(
-        "http://localhost:9000/api/viewed-content",
+        "http://angel-voice.ru/api/api/viewed-content",
         {
           user_id: userId,
           content_id: contentId,

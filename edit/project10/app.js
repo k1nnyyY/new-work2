@@ -11,7 +11,7 @@ app.use(express.json());
 app.use(bodyParser.json());
 
 app.use(cors({
-  origin: "http://localhost:5173", // Разрешаем запросы с вашего фронтенда
+  origin: "http://angel-voice.ru", // Разрешаем запросы с вашего фронтенда
   methods: ["GET", "POST", "PUT", "DELETE"], // Разрешенные методы
   credentials: true // Если нужно передавать cookies или заголовки аутентификации
 }));
