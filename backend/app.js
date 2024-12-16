@@ -122,6 +122,7 @@ app.post("/webhook/yookassa", async (req, res) => {
 app.post("/api/check-subscription", async (req, res) => {
   const { userId } = req.body;
 
+  
   if (!userId) {
     return res.status(400).json({ error: "User ID is required" });
   }
@@ -197,6 +198,7 @@ app.get('/viewed-content', async (req, res) => {
 app.post('/viewed-content', async (req, res) => { 
   const { user_id, content_id } = req.body; 
  
+  console.log("Получен запрос на добавление в просмотренные:", { user_id, content_id }); 
   try { 
     // Проверяем, существует ли content_id в audio_players 
     const { data: audioPlayer, error: checkError } = await supabase 
@@ -206,7 +208,11 @@ app.post('/viewed-content', async (req, res) => {
       .single(); 
  
     if (checkError) throw checkError; 
-    if (!audioPlayer) return res.status(400).json({ error: 'content_id не существует' }); 
+    if (!audioPlayer) {
+      console.error("content_id не найден:", content_id); // Логируем ошибку
+      return res.status(400).json({ error: 'content_id не существует' });
+    }
+
  
     // Добавляем запись в viewed_content 
     const { data, error } = await supabase 
@@ -215,10 +221,12 @@ app.post('/viewed-content', async (req, res) => {
       .select(); 
  
     if (error) throw error; 
+    console.log("Новая запись успешно добавлена:", data);
  
     res.status(201).json(data); 
   } catch (error) { 
     console.error(error); 
+    console.error("Ошибка при добавлении записи в viewed_content:", error);
     res.status(500).json({ error: 'Ошибка добавления данных' }); 
   } 
 });

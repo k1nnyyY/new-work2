@@ -91,8 +91,8 @@ const Container = styled.div`
 const Subtitle = styled.p`
   color: ${({ theme }) => theme.color};
   font-weight: 300;
-  font-size: 12px; 
-  opacity: 0.9; 
+  font-size: 12px;
+  opacity: 0.9;
   margin: 0;
 `;
 
@@ -103,7 +103,6 @@ const MainPage = () => {
   const [cards, setCards] = useState([]);
   const currentUser = useSelector((state) => state.user);
   const userData = useSelector((state) => state.user);
-  
 
   const navigate = useNavigate();
   useEffect(() => {
@@ -113,7 +112,9 @@ const MainPage = () => {
   useEffect(() => {
     const fetchAudioPlayers = async () => {
       try {
-        const response = await axios.get("https://angel-voice.ru/api/audio_players");
+        const response = await axios.get(
+          "https://angel-voice.ru/api/audio_players"
+        );
         setCards(response.data);
       } catch (error) {
         console.error("Error fetching audio players:", error);
@@ -122,14 +123,20 @@ const MainPage = () => {
     fetchAudioPlayers();
   }, []);
 
-  
-  const handleCardClick = async (contentId) => {
+  const handleCardClick = async (userId, contentId) => {
+
+    console.log("Клик на карточку:", { userId, contentId });
     try {
-      const response = await axios.post("https://angel-voice.ru/api/viewed-content", {
-        user_id: userData.id,
-        content_id: contentId,
-      });
-  
+      const response = await axios.post(
+        "https://angel-voice.ru/api/viewed-content",
+        {
+          user_id: userId,
+          content_id: contentId,
+        }
+      );
+
+      console.log("Ответ сервера:", response.data);
+
       if (response.status === 201) {
         console.log("Контент успешно добавлен в просмотренные:", response.data);
       } else {
@@ -139,8 +146,6 @@ const MainPage = () => {
       console.error("Ошибка при добавлении контента в просмотренные:", error);
     }
   };
-  
-
 
   return (
     <Background>
