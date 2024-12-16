@@ -267,7 +267,9 @@ const ProfilePage = () => {
     fetchUserData();
   }, [dispatch]);
 
-
+  const handleNext = () => {
+    navigate("/payment-info");
+  };
   
 
   useEffect(() => {
