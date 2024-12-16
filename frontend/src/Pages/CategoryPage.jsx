@@ -200,7 +200,7 @@ const CategoryPage = () => {
   useEffect(() => {
     const fetchContent = async () => {
       try {
-        const response = await axios.get("https://angel-voice.ru/api/api/content");
+        const response = await axios.get("https://angel-voice.ru/api/content");
 
         const fetchedCards = Array.isArray(response.data) ? response.data : [];
 

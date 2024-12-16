@@ -140,7 +140,7 @@ const CardPage = () => {
   useEffect(() => {
     const fetchCardData = async () => {
       try {
-        const response = await fetch(`http://angel-voice.ru/api/api/cards/1`);
+        const response = await fetch(`https://angel-voice.ru/api/cards/1`);
         if (!response.ok) {
           throw new Error("Ошибка загрузки данных");
         }
