@@ -246,7 +246,7 @@ const ProfilePage = () => {
   useEffect(() => {
     const fetchUserData = async () => {
       try {
-        const username = localStorage.getItem("username") || "k1nnyyY"; // Фиксированный username
+        const username = localStorage.getItem("username") || "k1nnyyY"; 
         const response = await fetch(
           `https://angel-voice.ru/api/check-user?username=${username}`
         );

@@ -103,6 +103,7 @@ const MainPage = () => {
   const [cards, setCards] = useState([]);
   const currentUser = useSelector((state) => state.user);
   const userData = useSelector((state) => state.user);
+  
 
   const navigate = useNavigate();
   useEffect(() => {
@@ -121,22 +122,25 @@ const MainPage = () => {
     fetchAudioPlayers();
   }, []);
 
-  const handleCardClick = async (userId, audioId) => {
+  
+  const handleCardClick = async (contentId) => {
     try {
-      const response = await axios.post(
-        "https://angel-voice.ru/api/viewed-content",
-        {
-          user_id: userId,
-          audio_id: audioId,
-        }
-      );
-
-      const { audioData } = response.data;
-      navigate("/players", { state: { audioData } });
+      const response = await axios.post("https://angel-voice.ru/api/viewed-content", {
+        user_id: userData.id,
+        content_id: contentId,
+      });
+  
+      if (response.status === 201) {
+        console.log("Контент успешно добавлен в просмотренные:", response.data);
+      } else {
+        console.warn("Неожиданный ответ сервера:", response);
+      }
     } catch (error) {
-      console.error("Error recording view:", error);
+      console.error("Ошибка при добавлении контента в просмотренные:", error);
     }
   };
+  
+
 
   return (
     <Background>

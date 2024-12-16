@@ -163,37 +163,65 @@ app.post("/api/check-subscription", async (req, res) => {
   }
 });
 
-app.post("/api/viewed-content", async (req, res) => {
-  const { user_id, audio_id } = req.body;
-
-  if (!user_id || !audio_id) {
-    return res.status(400).json({ error: "user_id and audio_id are required." });
-  }
-
-  try {
-    // Вставка в viewed_content
-    const { error: insertError } = await supabase
-      .from("viewed_content")
-      .insert([{ user_id: parseInt(user_id), content_id: parseInt(audio_id) }]);
-
-    if (insertError) throw insertError;
-
-    // Получение данных из audio_players
-    const { data: audioData, error: fetchError } = await supabase
-      .from("audio_players")
-      .select("*")
-      .eq("id", audio_id)
-      .single();
-
-    if (fetchError) throw fetchError;
-
-    res.status(200).json({ message: "Viewed recorded", audioData });
-  } catch (error) {
-    console.error("Error:", error.message);
-    res.status(500).json({ error: "Internal server error" });
-  }
+// Получение всех записей viewed_content с их связанными audio_players 
+app.get('/viewed-content', async (req, res) => { 
+  try { 
+    const { data, error } = await supabase 
+      .from('viewed_content') 
+      .select(` 
+        id, 
+        user_id, 
+        viewed_at, 
+        audio_players ( 
+          id, 
+          full_name, 
+          title, 
+          audio_link 
+        ) 
+      `) 
+      .order('id', { ascending: true }); 
+ 
+    if (error) throw error; 
+ 
+    res.json(data); 
+  } catch (error) { 
+    console.error(error); 
+    res.status(500).json({ error: 'Ошибка получения данных' }); 
+  } 
+}); 
+ 
+ 
+ 
+ 
+// Добавление новой записи в viewed_content 
+app.post('/viewed-content', async (req, res) => { 
+  const { user_id, content_id } = req.body; 
+ 
+  try { 
+    // Проверяем, существует ли content_id в audio_players 
+    const { data: audioPlayer, error: checkError } = await supabase 
+      .from('audio_players') 
+      .select('id') 
+      .eq('id', content_id) 
+      .single(); 
+ 
+    if (checkError) throw checkError; 
+    if (!audioPlayer) return res.status(400).json({ error: 'content_id не существует' }); 
+ 
+    // Добавляем запись в viewed_content 
+    const { data, error } = await supabase 
+      .from('viewed_content') 
+      .insert([{ user_id, content_id }]) 
+      .select(); 
+ 
+    if (error) throw error; 
+ 
+    res.status(201).json(data); 
+  } catch (error) { 
+    console.error(error); 
+    res.status(500).json({ error: 'Ошибка добавления данных' }); 
+  } 
 });
-
 app.get("/api/recently-viewed/:user_id", async (req, res) => {
   const { user_id } = req.params;
 
