@@ -12,7 +12,7 @@ bot.onText(/\/start/, (msg) => {
         [
           {
             text: "Открыть Web App",
-            web_app: { url: "https://new-work-kohl.vercel.app" },
+            web_app: { url: "https://angel-voice.ru" },
           },
         ],
       ],

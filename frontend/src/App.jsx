@@ -93,7 +93,7 @@ const App = () => {
         <Route path="/quiz" element={<QuizPage />} />
         {isAuthenticated && (
           <>
-            <Route path="/profile" element={<ProfilePage />} />
+            <Route path="/" element={<ProfilePage />} />
             <Route path="/player" element={<PlayerPage />} />
             <Route path="/card" element={<CardPage />} />
             <Route path="/payment-info" element={<PaymentInfoPage />} />
