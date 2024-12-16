@@ -227,7 +227,7 @@ const CategoryPage = () => {
     const fetchRecentlyViewed = async () => {
       try {
         const response = await axios.get(
-          `hhttps://angel-voice.ru/api/recently-viewed/${currentUser.id}`
+          `https://angel-voice.ru/api/recently-viewed/${currentUser.id}`
         );
         console.log("Recently viewed data:", response.data);
         setRecentlyViewed(response.data.recentlyViewed || []);
