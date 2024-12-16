@@ -439,7 +439,7 @@ app.post("/api/payment", async (req, res) => {
       amount: { value: amount, currency: "RUB" },
       confirmation: {
         type: "redirect",
-        return_url: "http://localhost:9000/success",
+        return_url: "https://angel-voice.ru/profile",
       },
       description: `${tariffName} for user ${userId}`,
     });
