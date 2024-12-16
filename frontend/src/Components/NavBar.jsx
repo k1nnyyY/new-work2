@@ -3,9 +3,30 @@ import musicIcon from "../assets/Vector.svg";
 import photoIcon from "../assets/Vector2.svg";
 import meditationIcon from "../assets/meditation.svg";
 import styled from "styled-components";
-import { faSignal } from "@fortawesome/free-solid-svg-icons";
+import { useNavigate } from "react-router-dom";
 
 const NavBar = () => {
+  const navigate = useNavigate();
+
+  const handleRedirect = (title) => {
+    switch (title) {
+      case "Игры":
+        // Редирект на Telegram-бота
+        window.location.href = "https://t.me/av_game_test_bot";
+        break;
+      case "Медитации":
+        // Редирект на /main
+        navigate("/main");
+        break;
+      case "практики":
+        // Редирект на /select-player
+        navigate("/select-player");
+        break;
+      default:
+        break;
+    }
+  };
+
   const Tab = styled.div`
     flex: 1;
     display: flex;
@@ -53,7 +74,7 @@ const NavBar = () => {
   return (
     <Header>
       {tabs.map((tab, index) => (
-        <Tab key={index}>
+        <Tab key={index} onClick={() => handleRedirect(tab.title)}>
           <img src={tab.icon} alt={tab.title} />
           {tab.title}
         </Tab>

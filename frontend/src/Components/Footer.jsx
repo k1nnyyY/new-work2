@@ -65,7 +65,7 @@ const Footer = () => {
       <FooterButton
         role="button"
         tabIndex="0"
-        onClick={() => handleRedirect("/profile")}
+        onClick={() => handleRedirect("/")}
       >
         <FontAwesomeIcon icon={faUser} />
       </FooterButton>
