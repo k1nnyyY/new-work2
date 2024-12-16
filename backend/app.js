@@ -11,7 +11,7 @@ app.use(bodyParser.json());
 
 app.use(
   cors({
-    origin: "http://angel-voice.ru",
+    origin: "https://angel-voice.ru",
     methods: ["GET", "POST", "PUT", "DELETE"],
     credentials: true,
   })
