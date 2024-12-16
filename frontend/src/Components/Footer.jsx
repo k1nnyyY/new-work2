@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUser, faMoon, faHeart, faFolder, faCircle } from "@fortawesome/free-regular-svg-icons";
 import { useNavigate } from "react-router-dom";
-import { useTheme } from "../ThemeProvider";
+
 
 const FooterContainer = styled.div`
   width: 100%;
@@ -36,7 +36,10 @@ const FooterIcon = styled.div`
 
 const Footer = () => {
   const navigate = useNavigate();
-  const { toggleTheme } = useTheme();
+  const [isDarkMode, setIsDarkMode] = useState(false);
+  const toggleTheme = () => {
+    setIsDarkMode(!isDarkMode);
+  };
 
   const handleRedirect = (path) => {
     if (window.Telegram?.WebApp) {
