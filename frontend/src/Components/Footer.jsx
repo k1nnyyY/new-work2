@@ -39,7 +39,13 @@ const Footer = () => {
   const { toggleTheme } = useTheme();
 
   const handleRedirect = (path) => {
-    navigate(path);
+    if (window.Telegram?.WebApp) {
+      // Если приложение запущено в Telegram WebApp, используем `Telegram.WebApp.navigateTo`
+      window.Telegram.WebApp.navigateTo(path);
+    } else {
+      // Обычный редирект для браузера
+      navigate(path);
+    }
   };
 
   return (
