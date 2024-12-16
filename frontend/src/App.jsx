@@ -20,44 +20,55 @@ const App = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(null);
   const [userData, setUserData] = useState(null);
   const navigate = useNavigate();
-
   useEffect(() => {
-    const checkUser = async () => {
-      try {
-        const fixedUsername = "k1nnyyY";
-        const response = await fetch(
-          `https://angel-voice.ru/api/check-user?username=${fixedUsername}`
-        );
+    // Инициализация Telegram WebApp API
+    if (window.Telegram?.WebApp) {
+      const tg = window.Telegram.WebApp;
 
-        if (!response.ok) {
-          if (response.status === 404) {
-            setIsAuthenticated(false);
-          } else {
-            console.error(
-              "Ошибка при проверке пользователя:",
-              response.statusText
+      // Установка темы пользователя
+      setIsDarkMode(tg.themeParams.theme === "dark");
+
+      // Получение username пользователя
+      const user = tg.initDataUnsafe?.user;
+      if (user?.username) {
+        const username = user.username;
+
+        const checkUser = async () => {
+          try {
+            const response = await fetch(
+              `https://angel-voice.ru/api/check-user?username=${username}`
             );
+
+            if (!response.ok) {
+              if (response.status === 404) {
+                setIsAuthenticated(false);
+              } else {
+                console.error(
+                  "Ошибка при проверке пользователя:",
+                  response.statusText
+                );
+              }
+              return;
+            }
+
+            const data = await response.json();
+
+            // Сохраняем ID пользователя и данные
+            if (data?.user?.id) {
+              localStorage.setItem("userId", data.user.id);
+              setUserData(data.user);
+              setIsAuthenticated(true);
+            }
+          } catch (err) {
+            console.error("Ошибка подключения к серверу:", err);
+            setIsAuthenticated(false);
           }
-          return;
-        }
+        };
 
-        const data = await response.json();
-
-        // Сохраняем ID пользователя и данные
-        if (data?.user?.id) {
-          localStorage.setItem("userId", data.user.id);
-          setUserData(data.user);
-          setIsAuthenticated(true);
-        }
-      } catch (err) {
-        console.error("Ошибка подключения к серверу:", err);
-        setIsAuthenticated(false);
+        checkUser();
       }
-    };
-
-    checkUser();
+    }
   }, []);
-
   useEffect(() => {
     if (
       isAuthenticated === false &&
