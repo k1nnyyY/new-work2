@@ -200,7 +200,7 @@ const CategoryPage = () => {
   useEffect(() => {
     const fetchContent = async () => {
       try {
-        const response = await axios.get("http://angel-voice.ru/api/api/content");
+        const response = await axios.get("https://angel-voice.ru/api/api/content");
 
         const fetchedCards = Array.isArray(response.data) ? response.data : [];
 
@@ -227,7 +227,7 @@ const CategoryPage = () => {
     const fetchRecentlyViewed = async () => {
       try {
         const response = await axios.get(
-          `http://angel-voice.ru/api/recently-viewed/${currentUser.id}`
+          `hhttps://angel-voice.ru/api/recently-viewed/${currentUser.id}`
         );
         console.log("Recently viewed data:", response.data);
         setRecentlyViewed(response.data.recentlyViewed || []);

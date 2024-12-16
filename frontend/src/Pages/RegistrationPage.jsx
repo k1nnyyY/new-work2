@@ -14,7 +14,7 @@ const RegistrationPage = () => {
       }
 
       // Отправляем initData на сервер
-      const response = await fetch("http://angel-voice.ru/api/api/check-user", {
+      const response = await fetch("https://angel-voice.ru/api/check-user", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

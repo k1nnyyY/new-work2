@@ -192,7 +192,7 @@ const MainListPage = () => {
   useEffect(() => {
     const fetchContent = async () => {
       try {
-        const response = await axios.get("http://angel-voice.ru/api/content");
+        const response = await axios.get("https://angel-voice.ru/api/content");
         setCards(Array.isArray(response.data) ? response.data : []);
       } catch (error) {
         console.error("Error fetching content:", error);

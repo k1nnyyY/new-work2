@@ -292,7 +292,7 @@ const SelectPlayerPage = () => {
   useEffect(() => {
     const fetchContent = async () => {
       try {
-        const response = await axios.get("http://angel-voice.ru/api/api/content/4");
+        const response = await axios.get("https://angel-voice.ru/api/content/4");
         console.log("Fetched content:", response.data);
         setCards(response.data);
       } catch (error) {

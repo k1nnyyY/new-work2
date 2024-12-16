@@ -211,7 +211,7 @@ const PlayerPage = () => {
   useEffect(() => {
     const fetchAudioData = async () => {
       try {
-        const response = await fetch(`http://angel-voice.ru/api/api/audio_players/2`); // ID = 1
+        const response = await fetch(`https://angel-voice.ru/api/audio_players/2`); // ID = 1
         if (!response.ok) {
           throw new Error("Ошибка загрузки данных аудио");
         }
