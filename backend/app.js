@@ -11,7 +11,7 @@ app.use(bodyParser.json());
 
 app.use(
   cors({
-    origin: ['http://localhost', 'https://angel-voice.ru', 'http://angel-voice.ru']
+    origin: ['http://localhost', 'https://angel-voice.ru', 'http://angel-voice.ru'],
     methods: ["GET", "POST", "PUT", "DELETE"],
     credentials: true,
   })
@@ -828,6 +828,12 @@ app.get("/api/user_dashboard/:id", async (req, res) => {
 });
 
 const PORT = 9000;
+
+app.use((err, req, res, next) => {
+  console.error("Ошибка:", err.stack);
+  res.status(500).send("Internal Server Error");
+});
+
 app.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);
 });
