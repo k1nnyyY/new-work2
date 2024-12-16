@@ -51,12 +51,14 @@ const Footer = () => {
     console.log(`Redirect to: ${path}`);
     if (window.Telegram?.WebApp) {
       console.log("Telegram WebApp redirect");
-      window.Telegram.WebApp.navigateTo(path);
+      // Используем стандартный способ перенаправления
+      window.location.href = path;
     } else {
       console.log("Browser redirect");
       navigate(path);
     }
   };
+  
 
   return (
     <FooterContainer>
