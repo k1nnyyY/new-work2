@@ -130,9 +130,13 @@ const QuizPage = () => {
     if (step < 6) {
       setStep(step + 1);
     } else {
+
+      const telegramData = window.Telegram.WebApp.initDataUnsafe?.user || {};
+      const telegramUsername = telegramData.username || "unknown_user";
+
       // Данные для отправки
       const requestData = {
-        username:"figk",
+        username:telegramUsername,
         firstName: name,
         dayofbirth: birthdate,
         gender: gender,
@@ -143,6 +147,9 @@ const QuizPage = () => {
         subscription: false,
       };
   
+
+      console.log("Data being sent to backend:", requestData);
+      
       try {
         const response = await fetch("https://angel-voice.ru/api/users", {
           method: "POST",

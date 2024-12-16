@@ -642,7 +642,10 @@ app.post("/api/users", async (req, res) => {
     firstName,
   } = req.body;
 
+  console.log("Incoming request data:", req.body); // Log incoming data
+
   if (!username || !gender || !dayofbirth) {
+    console.error("Validation error: Missing required fields.");
     return res.status(400).json({
       error: "id, username, gender, and dayofbirth are required fields.",
     });
@@ -665,13 +668,29 @@ app.post("/api/users", async (req, res) => {
       },
     ]);
 
+    console.log("Data being inserted into database:", {
+      username,
+      dayofbirth,
+      gender,
+      maritalstatus,
+      whatisjob,
+      yourobjective,
+      star,
+      subscription,
+      expiredsubscription,
+      job,
+      firstName,
+    });
+
     if (error) {
+      console.error("Database error:", error.message);
       return res.status(400).json({ error: error.message });
     }
 
+    console.log("Database insertion result:", data);
     res.status(201).json(data);
   } catch (err) {
-    console.error("Error creating user:", err);
+    console.error("Unexpected error while creating user:", err);
     res.status(500).json({ error: "Internal server error" });
   }
 });
