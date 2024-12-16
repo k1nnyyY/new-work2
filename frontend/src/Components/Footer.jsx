@@ -33,6 +33,11 @@ const Footer = () => {
     }
   `;
 
+  const toggleTheme = () => {
+    setIsDarkMode(!isDarkMode);
+  };
+
+
   return (
     <Footer>
       <FooterIcon>
@@ -42,7 +47,7 @@ const Footer = () => {
         <FontAwesomeIcon icon={faFolder} />
       </FooterIcon>
       <FooterIcon>
-        <FontAwesomeIcon icon={faMoon} />
+        <FontAwesomeIcon icon={faMoon} onClick={toggleTheme} />
       </FooterIcon>
       <FooterIcon>
         <FontAwesomeIcon icon={faHeart} />

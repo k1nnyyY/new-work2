@@ -105,20 +105,6 @@ const App = () => {
           </>
         )}
       </Routes>
-      <button
-        style={{
-          position: "absolute",
-          top: "10px",
-          right: "10px",
-          padding: "10px",
-          border: "none",
-          borderRadius: "5px",
-          cursor: "pointer",
-        }}
-        onClick={toggleTheme}
-      >
-        Переключить тему
-      </button>
     </ThemeProvider>
   );
 };

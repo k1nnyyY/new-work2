@@ -270,7 +270,7 @@ const ProfilePage = () => {
   }, [userData]);
 
   const tabs = [
-    { title: "МАК игры", icon: musicIcon },
+    { title: "Игры", icon: musicIcon },
     { title: "Медитации", icon: medIcon },
     { title: "практики", icon: photoIcon },
   ];
