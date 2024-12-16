@@ -26,7 +26,7 @@ const App = () => {
       try {
         const fixedUsername = "k1nnyyY";
         const response = await fetch(
-          `http://angel-voice.ru/api/api/check-user?username=${fixedUsername}`
+          `https://angel-voice.ru/api/check-user?username=${fixedUsername}`
         );
 
         if (!response.ok) {

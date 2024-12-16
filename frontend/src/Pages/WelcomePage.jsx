@@ -91,7 +91,7 @@ const WelcomePage = () => {
       <Container>
         <Image />
         <TextWrapper>
-          <Title>Добро пожаловать в Angelvoice!</Title>
+          <Title>Добро пожаловать в Angelvoice</Title>
           <Text>
             Избавьтесь от стресса и тревог с помощью медитаций и глубоких техник
             релаксации. В нашем приложении собраны инструменты, которые помогут
