@@ -11,7 +11,11 @@ app.use(bodyParser.json());
 
 app.use(
   cors({
-    origin: ['http://localhost', 'https://angel-voice.ru', 'http://angel-voice.ru', ],
+    origin: [
+      "http://localhost",
+      "https://angel-voice.ru",
+      "http://angel-voice.ru",
+    ],
     methods: ["GET", "POST", "PUT", "DELETE"],
     credentials: true,
   })
@@ -122,7 +126,6 @@ app.post("/webhook/yookassa", async (req, res) => {
 app.post("/api/check-subscription", async (req, res) => {
   const { userId } = req.body;
 
-  
   if (!userId) {
     return res.status(400).json({ error: "User ID is required" });
   }
@@ -164,12 +167,13 @@ app.post("/api/check-subscription", async (req, res) => {
   }
 });
 
-// Получение всех записей viewed_content с их связанными audio_players 
-app.get('/api/viewed-content', async (req, res) => { 
-  try { 
-    const { data, error } = await supabase 
-      .from('viewed_content') 
-      .select(` 
+// Получение всех записей viewed_content с их связанными audio_players
+app.get("/api/viewed-content", async (req, res) => {
+  try {
+    const { data, error } = await supabase
+      .from("viewed_content")
+      .select(
+        ` 
         id, 
         user_id, 
         viewed_at, 
@@ -179,57 +183,55 @@ app.get('/api/viewed-content', async (req, res) => {
           title, 
           audio_link 
         ) 
-      `) 
-      .order('id', { ascending: true }); 
- 
-    if (error) throw error; 
- 
-    res.json(data); 
-  } catch (error) { 
-    console.error(error); 
-    res.status(500).json({ error: 'Ошибка получения данных' }); 
-  } 
-}); 
- 
- 
- 
- 
-// Добавление новой записи в viewed_content 
-app.post('/api/viewed-content', async (req, res) => { 
-  const { user_id, content_id } = req.body; 
- 
-  console.log("Получен запрос на добавление в просмотренные:", { user_id, content_id }); 
-  try { 
-    // Проверяем, существует ли content_id в audio_players 
-    const { data: audioPlayer, error: checkError } = await supabase 
-      .from('audio_players') 
-      .select('id') 
-      .eq('id', content_id) 
-      .single(); 
- 
-    if (checkError) throw checkError; 
+      `
+      )
+      .order("id", { ascending: true });
+
+    if (error) throw error;
+
+    res.json(data);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Ошибка получения данных" });
+  }
+});
+
+app.post("/api/viewed-content", async (req, res) => {
+  const { user_id, content_id } = req.body;
+
+  console.log("Получен запрос на добавление в просмотренные:", {
+    user_id,
+    content_id,
+  });
+  try {
+    const { data: audioPlayer, error: checkError } = await supabase
+      .from("audio_players")
+      .select("*") // Включаем все данные
+      .eq("id", content_id)
+      .single();
+
+    if (checkError) throw checkError;
     if (!audioPlayer) {
-      console.error("content_id не найден:", content_id); // Логируем ошибку
-      return res.status(400).json({ error: 'content_id не существует' });
+      console.error("content_id не найден:", content_id);
+      return res.status(400).json({ error: "content_id не существует" });
     }
 
- 
-    // Добавляем запись в viewed_content 
-    const { data, error } = await supabase 
-      .from('viewed_content') 
-      .insert([{ user_id, content_id }]) 
-      .select(); 
- 
-    if (error) throw error; 
+    const { data, error } = await supabase
+      .from("viewed_content")
+      .insert([{ user_id, content_id }])
+      .select();
+
+    if (error) throw error;
+
     console.log("Новая запись успешно добавлена:", data);
- 
-    res.status(201).json(data); 
-  } catch (error) { 
-    console.error(error); 
+
+    res.status(201).json({ success: true, content: audioPlayer });
+  } catch (error) {
     console.error("Ошибка при добавлении записи в viewed_content:", error);
-    res.status(500).json({ error: 'Ошибка добавления данных' }); 
-  } 
+    res.status(500).json({ error: "Ошибка добавления данных" });
+  }
 });
+
 app.get("/api/recently-viewed/:user_id", async (req, res) => {
   const { user_id } = req.params;
 
@@ -517,12 +519,17 @@ app.post("/api/webhook", async (req, res) => {
         .single();
 
       if (paymentError || !paymentData) {
-        console.log("Payment not found in database:", paymentError?.message || "No data found");
+        console.log(
+          "Payment not found in database:",
+          paymentError?.message || "No data found"
+        );
         return res.status(400).json({ error: "Payment not found" });
       }
 
       const { user_id: userId, tariff_name: tariffName } = paymentData;
-      console.log(`Found payment in database. UserID: ${userId}, Tariff: ${tariffName}`);
+      console.log(
+        `Found payment in database. UserID: ${userId}, Tariff: ${tariffName}`
+      );
 
       // Calculate subscription expiration date
       let monthsToAdd;
@@ -543,7 +550,9 @@ app.post("/api/webhook", async (req, res) => {
         },
       ]);
 
-      console.log(`Subscription activated for user ${userId}, expires at: ${expirationDate}`);
+      console.log(
+        `Subscription activated for user ${userId}, expires at: ${expirationDate}`
+      );
 
       // Update payment status
       await supabase
@@ -551,7 +560,9 @@ app.post("/api/webhook", async (req, res) => {
         .update({ status: "succeeded" })
         .eq("payment_id", paymentId);
 
-      console.log(`Payment status updated to 'succeeded' for payment ID: ${paymentId}`);
+      console.log(
+        `Payment status updated to 'succeeded' for payment ID: ${paymentId}`
+      );
       res.status(200).send("OK");
     } catch (error) {
       console.log("Error processing webhook:", error.message);
@@ -594,7 +605,9 @@ app.post("/api/check-subscription", async (req, res) => {
     const currentDate = new Date();
     const expiredDate = new Date(data.expiredsubscription);
 
-    console.log(`Subscription check: Current Date: ${currentDate}, Expired Date: ${expiredDate}`);
+    console.log(
+      `Subscription check: Current Date: ${currentDate}, Expired Date: ${expiredDate}`
+    );
 
     if (expiredDate < currentDate) {
       console.log("Subscription has expired. Updating database...");

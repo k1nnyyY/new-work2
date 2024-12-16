@@ -205,25 +205,33 @@ const PlayerPage = () => {
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [audioData, setAudioData] = useState(null);
+  const location = useLocation();
+  const { contentId } = location.state || {};
 
-  const audioRef = useRef(null);
+
 
   useEffect(() => {
     const fetchAudioData = async () => {
+      if (!contentId) {
+        console.error("ID контента не передан");
+        return;
+      }
+
       try {
-        const response = await fetch(`https://angel-voice.ru/api/audio_players/2`); // ID = 1
-        if (!response.ok) {
-          throw new Error("Ошибка загрузки данных аудио");
-        }
-        const data = await response.json();
-        setAudioData(data); // Устанавливаем данные аудио
+        const response = await axios.get(
+          `https://angel-voice.ru/api/audio_players/${contentId}`
+        );
+        setAudioData(response.data);
       } catch (error) {
-        console.error("Ошибка:", error.message);
+        console.error("Ошибка при загрузке данных контента:", error);
       }
     };
 
     fetchAudioData();
-  }, []);
+  }, [contentId]);
+
+  const audioRef = useRef(null);
 
   const togglePlay = () => {
     const audio = audioRef.current;
@@ -263,12 +271,7 @@ const PlayerPage = () => {
     return `${minutes}:${seconds < 10 ? "0" : ""}${seconds}`;
   };
 
-  const location = useLocation();
-  const { audioData } = location.state || {};
 
-  if (!audioData) {
-    return <div>Данные не найдены</div>;
-  }
 
 
   if (!audioData) {

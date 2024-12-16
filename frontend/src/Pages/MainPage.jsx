@@ -122,9 +122,7 @@ const MainPage = () => {
     };
     fetchAudioPlayers();
   }, []);
-
   const handleCardClick = async (userId, contentId) => {
-
     console.log("Клик на карточку:", { userId, contentId });
     try {
       const response = await axios.post(
@@ -134,11 +132,13 @@ const MainPage = () => {
           content_id: contentId,
         }
       );
-
+  
       console.log("Ответ сервера:", response.data);
-
+  
       if (response.status === 201) {
         console.log("Контент успешно добавлен в просмотренные:", response.data);
+        // Редирект на страницу /player с передачей contentId
+        navigate(`/player`, { state: { contentId } });
       } else {
         console.warn("Неожиданный ответ сервера:", response);
       }
@@ -146,6 +146,7 @@ const MainPage = () => {
       console.error("Ошибка при добавлении контента в просмотренные:", error);
     }
   };
+  
 
   return (
     <Background>
