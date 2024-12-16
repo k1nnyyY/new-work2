@@ -40,6 +40,7 @@ const Footer = () => {
 
   const handleRedirect = (path) => {
     if (window.Telegram?.WebApp) {
+      console.log("hi")
       // Если приложение запущено в Telegram WebApp, используем `Telegram.WebApp.navigateTo`
       window.Telegram.WebApp.navigateTo(path);
     } else {
