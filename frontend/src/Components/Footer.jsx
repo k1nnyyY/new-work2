@@ -1,13 +1,7 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faUser,
-  faMoon,
-  faHeart,
-  faFolder,
-  faCircle,
-} from "@fortawesome/free-regular-svg-icons";
+import { faUser, faMoon, faHeart, faFolder, faCircle } from "@fortawesome/free-regular-svg-icons";
 import { useNavigate } from "react-router-dom";
 
 const FooterContainer = styled.div`
@@ -27,10 +21,11 @@ const FooterContainer = styled.div`
   backdrop-filter: blur(15px);
   -webkit-backdrop-filter: blur(15px);
   border-top: 1px solid rgba(255, 255, 255, 0.2);
+  z-index: 10; /* Убедитесь, что элементы на переднем плане */
 `;
 
 const FooterButton = styled.button`
-  all: unset; /* Убираем все стили кнопки */
+  all: unset;
   cursor: pointer;
   font-size: 24px;
   color: ${({ theme }) => theme.color};
@@ -38,6 +33,9 @@ const FooterButton = styled.button`
   &:hover {
     color: rgba(255, 255, 255, 0.8);
   }
+
+  /* Временные границы для отладки */
+  border: 1px solid red;
 `;
 
 const Footer = () => {
@@ -45,33 +43,52 @@ const Footer = () => {
   const [isDarkMode, setIsDarkMode] = useState(false);
 
   const toggleTheme = () => {
+    console.log("Toggle theme clicked");
     setIsDarkMode(!isDarkMode);
   };
 
   const handleRedirect = (path) => {
+    console.log(`Redirect to: ${path}`);
     if (window.Telegram?.WebApp) {
-      console.log("hi");
+      console.log("Telegram WebApp redirect");
       window.Telegram.WebApp.navigateTo(path);
     } else {
+      console.log("Browser redirect");
       navigate(path);
     }
   };
 
   return (
     <FooterContainer>
-      <FooterButton onClick={() => handleRedirect("/profile")}>
+      <FooterButton
+        role="button"
+        tabIndex="0"
+        onClick={() => handleRedirect("/profile")}
+      >
         <FontAwesomeIcon icon={faUser} />
       </FooterButton>
-      <FooterButton onClick={() => handleRedirect("/card")}>
+      <FooterButton
+        role="button"
+        tabIndex="0"
+        onClick={() => handleRedirect("/card")}
+      >
         <FontAwesomeIcon icon={faFolder} />
       </FooterButton>
-      <FooterButton onClick={toggleTheme}>
+      <FooterButton
+        role="button"
+        tabIndex="0"
+        onClick={toggleTheme}
+      >
         <FontAwesomeIcon icon={faMoon} />
       </FooterButton>
-      <FooterButton>
+      <FooterButton role="button" tabIndex="0">
         <FontAwesomeIcon icon={faHeart} />
       </FooterButton>
-      <FooterButton onClick={() => handleRedirect("/category")}>
+      <FooterButton
+        role="button"
+        tabIndex="0"
+        onClick={() => handleRedirect("/category")}
+      >
         <FontAwesomeIcon icon={faCircle} />
       </FooterButton>
     </FooterContainer>
