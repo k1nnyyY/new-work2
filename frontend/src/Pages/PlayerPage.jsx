@@ -3,6 +3,7 @@ import styled from "styled-components";
 import { FaPlay, FaPause, FaRedo, FaUndo } from "react-icons/fa";
 import Header from "../Components/Header";
 import { useLocation } from "react-router-dom";
+import axios from "axios"
 
 const Background = styled.div`
   height: 100vh;
