@@ -1,9 +1,14 @@
-import React, {useState} from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faUser, faMoon, faHeart, faFolder, faCircle } from "@fortawesome/free-regular-svg-icons";
+import {
+  faUser,
+  faMoon,
+  faHeart,
+  faFolder,
+  faCircle,
+} from "@fortawesome/free-regular-svg-icons";
 import { useNavigate } from "react-router-dom";
-
 
 const FooterContainer = styled.div`
   width: 100%;
@@ -24,10 +29,11 @@ const FooterContainer = styled.div`
   border-top: 1px solid rgba(255, 255, 255, 0.2);
 `;
 
-const FooterIcon = styled.div`
+const FooterButton = styled.button`
+  all: unset; /* Убираем все стили кнопки */
+  cursor: pointer;
   font-size: 24px;
   color: ${({ theme }) => theme.color};
-  cursor: pointer;
 
   &:hover {
     color: rgba(255, 255, 255, 0.8);
@@ -37,38 +43,37 @@ const FooterIcon = styled.div`
 const Footer = () => {
   const navigate = useNavigate();
   const [isDarkMode, setIsDarkMode] = useState(false);
+
   const toggleTheme = () => {
     setIsDarkMode(!isDarkMode);
   };
 
   const handleRedirect = (path) => {
     if (window.Telegram?.WebApp) {
-      console.log("hi")
-      // Если приложение запущено в Telegram WebApp, используем `Telegram.WebApp.navigateTo`
+      console.log("hi");
       window.Telegram.WebApp.navigateTo(path);
     } else {
-      // Обычный редирект для браузера
       navigate(path);
     }
   };
 
   return (
     <FooterContainer>
-      <FooterIcon onClick={() => handleRedirect("/profile")}>
+      <FooterButton onClick={() => handleRedirect("/profile")}>
         <FontAwesomeIcon icon={faUser} />
-      </FooterIcon>
-      <FooterIcon onClick={() => handleRedirect("/card")}>
+      </FooterButton>
+      <FooterButton onClick={() => handleRedirect("/card")}>
         <FontAwesomeIcon icon={faFolder} />
-      </FooterIcon>
-      <FooterIcon onClick={toggleTheme}>
+      </FooterButton>
+      <FooterButton onClick={toggleTheme}>
         <FontAwesomeIcon icon={faMoon} />
-      </FooterIcon>
-      <FooterIcon>
+      </FooterButton>
+      <FooterButton>
         <FontAwesomeIcon icon={faHeart} />
-      </FooterIcon>
-      <FooterIcon onClick={() => handleRedirect("/category")}>
+      </FooterButton>
+      <FooterButton onClick={() => handleRedirect("/category")}>
         <FontAwesomeIcon icon={faCircle} />
-      </FooterIcon>
+      </FooterButton>
     </FooterContainer>
   );
 };
