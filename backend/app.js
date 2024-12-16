@@ -165,7 +165,7 @@ app.post("/api/check-subscription", async (req, res) => {
 });
 
 // Получение всех записей viewed_content с их связанными audio_players 
-app.get('/viewed-content', async (req, res) => { 
+app.get('/api/viewed-content', async (req, res) => { 
   try { 
     const { data, error } = await supabase 
       .from('viewed_content') 
@@ -195,7 +195,7 @@ app.get('/viewed-content', async (req, res) => {
  
  
 // Добавление новой записи в viewed_content 
-app.post('/viewed-content', async (req, res) => { 
+app.post('/api/viewed-content', async (req, res) => { 
   const { user_id, content_id } = req.body; 
  
   console.log("Получен запрос на добавление в просмотренные:", { user_id, content_id }); 
