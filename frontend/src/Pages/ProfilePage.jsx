@@ -237,18 +237,20 @@ const SectionWrapper = styled.div`
 const ProfilePage = () => {
   const dispatch = useDispatch();
   const userData = useSelector((state) => state.user);
+  const [username, setUsername] = useState("Гость");
+  const [photoUrl, setPhotoUrl] = useState("");
   const navigate = useNavigate();
 
-  const handleNext = () => {
-    navigate("/payment-info");
-  };
-
   useEffect(() => {
+    // Telegram WebApp integration
+    const telegramData = window.Telegram.WebApp.initDataUnsafe?.user || {};
+    setUsername(telegramData.username || "Гость");
+    setPhotoUrl(telegramData.photo_url || "https://via.placeholder.com/80");
+
     const fetchUserData = async () => {
       try {
-        const username = localStorage.getItem("username") || "k1nnyyY"; 
         const response = await fetch(
-          `https://angel-voice.ru/api/check-user?username=${username}`
+          `https://angel-voice.ru/api/check-user?username=${telegramData.username}`
         );
         const data = await response.json();
 
@@ -264,6 +266,9 @@ const ProfilePage = () => {
 
     fetchUserData();
   }, [dispatch]);
+
+
+  
 
   useEffect(() => {
     console.log("Redux state for user in ProfilePage:", userData);
