@@ -248,7 +248,7 @@ const ProfilePage = () => {
       try {
         const username = localStorage.getItem("username") || "k1nnyyY"; // Фиксированный username
         const response = await fetch(
-          `http://angel-voice.ru/api/api/check-user?username=${username}`
+          `https://angel-voice.ru/api/check-user?username=${username}`
         );
         const data = await response.json();
 
