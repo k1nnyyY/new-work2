@@ -242,7 +242,7 @@ const ProfilePage = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    // Telegram WebApp integration
+    console.log("hello")
     const telegramData = window.Telegram.WebApp.initDataUnsafe?.user || {};
     setUsername(telegramData.username || "Гость");
     setPhotoUrl(telegramData.photo_url || "https://via.placeholder.com/80");
