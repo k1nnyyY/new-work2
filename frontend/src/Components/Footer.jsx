@@ -1,8 +1,14 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faUser, faMoon, faHeart, faFolder, faCircle } from "@fortawesome/free-regular-svg-icons";
-import { useNavigate } from "react-router-dom";
+import {
+  faUser,
+  faMoon,
+  faHeart,
+  faFolder,
+  faCircle,
+} from "@fortawesome/free-regular-svg-icons";
+import { useNavigate, useLocation } from "react-router-dom";
 
 const FooterContainer = styled.div`
   width: 100%;
@@ -28,18 +34,16 @@ const FooterButton = styled.button`
   all: unset;
   cursor: pointer;
   font-size: 24px;
-  color: ${({ theme }) => theme.color};
+  color: ${({ isActive }) => (isActive ? "#1C0019" : "#fff")};
 
   &:hover {
     color: rgba(255, 255, 255, 0.8);
   }
-
-  /* Временные границы для отладки */
-  border: 1px solid red;
 `;
 
 const Footer = () => {
   const navigate = useNavigate();
+  const location = useLocation(); // Получаем текущий путь
   const [isDarkMode, setIsDarkMode] = useState(false);
 
   const toggleTheme = () => {
@@ -51,45 +55,43 @@ const Footer = () => {
     console.log(`Redirect to: ${path}`);
     if (window.Telegram?.WebApp) {
       console.log("Telegram WebApp redirect");
-      // Используем стандартный способ перенаправления
       window.location.href = path;
     } else {
       console.log("Browser redirect");
       navigate(path);
     }
   };
-  
+
+  // Сопоставление пути с активной кнопкой
+  const routes = {
+    home: "/",
+    card: "/card",
+    category: "/category",
+  };
 
   return (
     <FooterContainer>
       <FooterButton
-        role="button"
-        tabIndex="0"
-        onClick={() => handleRedirect("/")}
+        isActive={location.pathname === routes.home}
+        onClick={() => handleRedirect(routes.home)}
       >
         <FontAwesomeIcon icon={faUser} />
       </FooterButton>
       <FooterButton
-        role="button"
-        tabIndex="0"
-        onClick={() => handleRedirect("/card")}
+        isActive={location.pathname === routes.card}
+        onClick={() => handleRedirect(routes.card)}
       >
         <FontAwesomeIcon icon={faFolder} />
       </FooterButton>
-      <FooterButton
-        role="button"
-        tabIndex="0"
-        onClick={toggleTheme}
-      >
+      <FooterButton onClick={toggleTheme}>
         <FontAwesomeIcon icon={faMoon} />
       </FooterButton>
-      <FooterButton role="button" tabIndex="0">
+      <FooterButton>
         <FontAwesomeIcon icon={faHeart} />
       </FooterButton>
       <FooterButton
-        role="button"
-        tabIndex="0"
-        onClick={() => handleRedirect("/category")}
+        isActive={location.pathname === routes.category}
+        onClick={() => handleRedirect(routes.category)}
       >
         <FontAwesomeIcon icon={faCircle} />
       </FooterButton>
