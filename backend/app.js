@@ -11,7 +11,7 @@ app.use(bodyParser.json());
 
 app.use(
   cors({
-    origin: ['http://localhost', 'https://angel-voice.ru', 'http://angel-voice.ru'],
+    origin: ['http://localhost', 'https://angel-voice.ru', 'http://angel-voice.ru', ],
     methods: ["GET", "POST", "PUT", "DELETE"],
     credentials: true,
   })
@@ -164,37 +164,36 @@ app.post("/api/check-subscription", async (req, res) => {
 });
 
 app.post("/api/viewed-content", async (req, res) => {
-  const { user_id, content_id } = req.body;
+  const { user_id, audio_id } = req.body;
 
-  console.log("Received data from client:", req.body); // Лог входящих данных
-
-  if (!user_id || !content_id) {
-    console.error("Missing user_id or content_id");
-    return res
-      .status(400)
-      .json({ error: "user_id and content_id are required." });
+  if (!user_id || !audio_id) {
+    return res.status(400).json({ error: "user_id and audio_id are required." });
   }
 
   try {
-    const { data, error } = await supabase
+    // Вставка в viewed_content
+    const { error: insertError } = await supabase
       .from("viewed_content")
-      .insert([
-        { user_id: parseInt(user_id), content_id: parseInt(content_id) },
-      ]);
+      .insert([{ user_id: parseInt(user_id), content_id: parseInt(audio_id) }]);
 
-    if (error) {
-      console.error("Error inserting into database:", error);
-      return res.status(500).json({ error: error.message });
-    }
+    if (insertError) throw insertError;
 
-    res
-      .status(201)
-      .json({ message: "Content viewed recorded successfully", data });
-  } catch (err) {
-    console.error("Error saving viewed content:", err);
+    // Получение данных из audio_players
+    const { data: audioData, error: fetchError } = await supabase
+      .from("audio_players")
+      .select("*")
+      .eq("id", audio_id)
+      .single();
+
+    if (fetchError) throw fetchError;
+
+    res.status(200).json({ message: "Viewed recorded", audioData });
+  } catch (error) {
+    console.error("Error:", error.message);
     res.status(500).json({ error: "Internal server error" });
   }
 });
+
 app.get("/api/recently-viewed/:user_id", async (req, res) => {
   const { user_id } = req.params;
 
@@ -639,6 +638,16 @@ app.get("/api/audio_players/:id", async (req, res) => {
 
   if (error) {
     return res.status(404).json({ error: "Запись не найдена" });
+  }
+
+  res.json(data);
+});
+
+app.get("/api/audio_players", async (req, res) => {
+  const { data, error } = await supabase.from("audio_players").select("*");
+
+  if (error) {
+    return res.status(500).json({ error: error.message });
   }
 
   res.json(data);
