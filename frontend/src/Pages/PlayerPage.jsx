@@ -2,6 +2,7 @@ import React, { useEffect, useState, useRef } from "react";
 import styled from "styled-components";
 import { FaPlay, FaPause, FaRedo, FaUndo } from "react-icons/fa";
 import Header from "../Components/Header";
+import { useLocation } from "react-router-dom";
 
 const Background = styled.div`
   height: 100vh;
@@ -200,7 +201,6 @@ const Modal = ({ onClose }) => {
   );
 };
 const PlayerPage = () => {
-  const [audioData, setAudioData] = useState(null); // Состояние для данных аудио
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
@@ -262,6 +262,13 @@ const PlayerPage = () => {
     const seconds = Math.floor(time % 60);
     return `${minutes}:${seconds < 10 ? "0" : ""}${seconds}`;
   };
+
+  const location = useLocation();
+  const { audioData } = location.state || {};
+
+  if (!audioData) {
+    return <div>Данные не найдены</div>;
+  }
 
 
   if (!audioData) {

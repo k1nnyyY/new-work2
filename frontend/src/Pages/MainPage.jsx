@@ -4,6 +4,7 @@ import Footer from "../Components/Footer";
 import NavBar from "../Components/NavBar";
 import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 
 const Background = styled.div`
   height: 100vh;
@@ -102,42 +103,38 @@ const MainPage = () => {
   const [cards, setCards] = useState([]);
   const currentUser = useSelector((state) => state.user);
   const userData = useSelector((state) => state.user);
+
+  const navigate = useNavigate();
   useEffect(() => {
     console.log("Redux state for user in ProfilePage:", userData);
   }, [userData]);
 
   useEffect(() => {
-    const fetchContent = async () => {
+    const fetchAudioPlayers = async () => {
       try {
-        const response = await axios.get("https://angel-voice.ru/api/content");
-        setCards(Array.isArray(response.data) ? response.data : []);
+        const response = await axios.get("https://angel-voice.ru/api/audio_players");
+        setCards(response.data);
       } catch (error) {
-        console.error("Error fetching content:", error);
+        console.error("Error fetching audio players:", error);
       }
     };
-
-    fetchContent();
+    fetchAudioPlayers();
   }, []);
 
-  const handleCardClick = async (userId, contentId) => {
-    console.log("Sending data to API:", {
-      user_id: userId,
-      content_id: contentId,
-    }); // Лог отправляемых данных
+  const handleCardClick = async (userId, audioId) => {
     try {
       const response = await axios.post(
         "https://angel-voice.ru/api/viewed-content",
         {
           user_id: userId,
-          content_id: contentId,
+          audio_id: audioId,
         }
       );
-      console.log("Response from API:", response.data);
+
+      const { audioData } = response.data;
+      navigate("/players", { state: { audioData } });
     } catch (error) {
-      console.error(
-        "Error recording viewed content:",
-        error.response?.data || error.message
-      );
+      console.error("Error recording view:", error);
     }
   };
 
