@@ -22,8 +22,8 @@ app.use(
 );
 
 const yooKassa = new YooKassa({
-  shopId: "995548",
-  secretKey: "test_jv6MLJHEyQXARJ-mib7sDe35eaPccpD2TVwcGOK1fmQ",
+  shopId: "991328",
+  secretKey: "live_xOvIUNC2Kul9R1nFNjUjhr3BQ0hwcojYODmDBWhWMdU",
 });
 app.post("/api/payment/:userId", async (req, res) => {
   const { userId } = req.params;

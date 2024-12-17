@@ -126,6 +126,21 @@ const QuizPage = () => {
   const [gender, setGender] = useState("");
   const [relationshipStatus, setRelationshipStatus] = useState("");
   const navigate = useNavigate();
+
+  const handleRedirect = (path) => {
+    console.log(`Redirect to: ${path}`);
+    if (window.Telegram?.WebApp) {
+      console.log("Telegram WebApp redirect");
+      window.location.href = path;
+    } else {
+      console.log("Browser redirect");
+      navigate(path);
+    }
+  };
+
+  const routes = {
+    profile: "/profile",
+  };
   const handleNext = async () => {
     if (step < 6) {
       setStep(step + 1);
@@ -147,9 +162,8 @@ const QuizPage = () => {
         subscription: false,
       };
   
-
       console.log("Data being sent to backend:", requestData);
-      
+
       try {
         const response = await fetch("https://angel-voice.ru/api/users", {
           method: "POST",
@@ -167,6 +181,7 @@ const QuizPage = () => {
           const data = await response.json();
           console.log("Данные успешно отправлены:", data);
           alert("Регистрация завершена!");
+          handleRedirect(routes.card)
           navigate("/profile");
         }
       } catch (error) {
